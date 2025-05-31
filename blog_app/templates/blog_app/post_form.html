@@ -1,78 +1,128 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ post.title|default:"Detalle del Post" }} - Mi Blog{% endblock %}
+{% block title %}{{ page_title|default:"Gestionar Post" }} - Mi Blog{% endblock %}
 
 {% block extra_head %}
-    {% if post.meta_description %}
-    <meta name="description" content="{{ post.meta_description }}">
-    {% endif %}
-    {% if post.keywords %}
-    <meta name="keywords" content="{{ post.keywords }}">
-    {% endif %}
+    {# Cargar los media necesarios para el widget de CKEditor #}
+    {{ form.media }} 
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <article class="post-detail">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <header class="mb-4 text-center">
-                    <h1 class="display-4 fw-bold">{{ post.title }}</h1>
-                    <div class="post-meta text-muted mt-2">
-                        <i class="fas fa-user"></i> Por <a href="{% url 'accounts:profile_view_user' username=post.author.username %}">{{ post.author.username }}</a>
-                        <span class="mx-2">&bull;</span>
-                        <i class="fas fa-calendar-alt"></i> Publicado el {{ post.published_date|date:"d F, Y H:i" }}
-                        {% if post.updated_at|timesince:post.published_date > "0 minutes" and post.updated_at != post.published_date %}
-                            <span class="mx-2">&bull;</span>
-                            <i class="fas fa-sync-alt"></i> Actualizado: {{ post.updated_at|date:"d F, Y H:i" }}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm">
+                <div class="card-header {% if form_mode == 'create' %}bg-success{% else %}bg-info{% endif %} text-white">
+                    <h2 class="card-title mb-0">{{ page_title }}</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data" novalidate> {# enctype es crucial para la subida de archivos #}
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    <p class="mb-0">{{ error }}</p>
+                                {% endfor %}
+                            </div>
                         {% endif %}
-                         {% if post.author == request.user or request.user.is_staff %}
-                            <span class="mx-2">&bull;</span>
-                            <span class="badge {% if post.status == 'published' %}bg-success{% else %}bg-warning text-dark{% endif %}">{{ post.get_status_display }}</span>
-                        {% endif %}
-                    </div>
-                </header>
 
-                {% if post.get_featured_image_url %}
-                <figure class="text-center mb-4">
-                    <img src="{{ post.get_featured_image_url }}" class="img-fluid rounded shadow-sm" alt="[Imagen destacada de {{ post.title }}]" style="max-height: 500px;">
-                </figure>
-                {% endif %}
-
-                <section class="post-content ck-content fs-5">
-                    {# El contenido de CKEditor ya es seguro si se usa RichTextUploadingField y el filtro |safe #}
-                    {# Si hay un resumen, podrías mostrarlo antes del contenido principal o integrarlo #}
-                    {% if post.summary %}
-                        <div class="alert alert-light lead fs-5" style="font-style: italic;">
-                            {{ post.summary|safe }}
+                        {# Renderizar campos individualmente para mayor control o usar un bucle #}
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label for="{{ form.title.id_for_label }}" class="form-label fs-5 fw-bold">{{ form.title.label }}</label>
+                                    {{ form.title }}
+                                    {% if form.title.help_text %}<small class="form-text text-muted">{{ form.title.help_text }}</small>{% endif %}
+                                    {% for error in form.title.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                 <div class="mb-3">
+                                    <label for="{{ form.slug.id_for_label }}" class="form-label">{{ form.slug.label }}</label>
+                                    {{ form.slug }}
+                                    {% if form.slug.help_text %}<small class="form-text text-muted">{{ form.slug.help_text }}</small>{% endif %}
+                                    {% for error in form.slug.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                                </div>
+                            </div>
                         </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.summary.id_for_label }}" class="form-label">{{ form.summary.label }}</label>
+                            {{ form.summary }} {# CKEditor se renderizará aquí #}
+                            {% if form.summary.help_text %}<small class="form-text text-muted">{{ form.summary.help_text }}</small>{% endif %}
+                            {% for error in form.summary.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.content.id_for_label }}" class="form-label fs-5 fw-bold">{{ form.content.label }}</label>
+                            {{ form.content }} {# CKEditor se renderizará aquí #}
+                            {% if form.content.help_text %}<small class="form-text text-muted">{{ form.content.help_text }}</small>{% endif %}
+                            {% for error in form.content.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                        </div>
+                        
                         <hr class="my-4">
-                    {% endif %}
-                    {{ post.content|safe }}
-                </section>
+                        <h4 class="mb-3">Configuración Adicional</h4>
 
-                {% if post.author == request.user or request.user.is_staff %}
-                <hr class="my-4">
-                <div class="text-center mb-4">
-                    <a href="{% url 'blog:post_update' post.slug %}" class="btn btn-lg btn-outline-primary me-2">
-                        <i class="fas fa-edit"></i> Editar Post
-                    </a>
-                    <a href="{% url 'blog:post_delete' post.slug %}" class="btn btn-lg btn-outline-danger">
-                        <i class="fas fa-trash-alt"></i> Eliminar Post
-                    </a>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.featured_image.id_for_label }}" class="form-label">{{ form.featured_image.label }}</label>
+                                    {% if form.instance.pk and form.instance.get_featured_image_url %} {# Modificado: solo mostrar si la instancia ya existe (tiene pk) #}
+                                    <p class="mb-1">
+                                        <small>Actual: <a href="{{ form.instance.get_featured_image_url }}" target="_blank">{{ form.instance.featured_image.name|truncatechars:30 }}</a></small>
+                                        <br><img src="{{ form.instance.get_featured_image_url }}" alt="[Imagen destacada actual]" style="max-height: 80px; margin-top: 5px; border-radius: 4px;">
+                                    </p>
+                                    {% endif %}
+                                    {{ form.featured_image }}
+                                    {% if form.featured_image.help_text %}<small class="form-text text-muted">{{ form.featured_image.help_text }}</small>{% endif %}
+                                    {% for error in form.featured_image.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                                </div>
+                            </div>
+                             <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="{{ form.status.id_for_label }}" class="form-label">{{ form.status.label }}</label>
+                                    {{ form.status }}
+                                    {% if form.status.help_text %}<small class="form-text text-muted">{{ form.status.help_text }}</small>{% endif %}
+                                    {% for error in form.status.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="{{ form.published_date.id_for_label }}" class="form-label">{{ form.published_date.label }}</label>
+                                    {{ form.published_date }}
+                                    {% if form.published_date.help_text %}<small class="form-text text-muted">{{ form.published_date.help_text }}</small>{% endif %}
+                                    {% for error in form.published_date.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h5 class="mt-3 mb-2">SEO (Opcional)</h5>
+                         <div class="mb-3">
+                            <label for="{{ form.meta_description.id_for_label }}" class="form-label">{{ form.meta_description.label }}</label>
+                            {{ form.meta_description }}
+                            {% if form.meta_description.help_text %}<small class="form-text text-muted">{{ form.meta_description.help_text }}</small>{% endif %}
+                            {% for error in form.meta_description.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                        </div>
+                         <div class="mb-3">
+                            <label for="{{ form.keywords.id_for_label }}" class="form-label">{{ form.keywords.label }}</label>
+                            {{ form.keywords }}
+                            {% if form.keywords.help_text %}<small class="form-text text-muted">{{ form.keywords.help_text }}</small>{% endif %}
+                            {% for error in form.keywords.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                        </div>
+
+                        <hr class="my-4">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% if form.instance.pk %}{{ form.instance.get_absolute_url }}{% else %}{% url 'blog:post_list' %}{% endif %}" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn {% if form_mode == 'create' %}btn-success{% else %}btn-info{% endif %}">
+                                <i class="fas fa-save"></i> {% if form_mode == 'create' %}Publicar Post{% else %}Guardar Cambios{% endif %}
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                {% endif %}
-                
-                <hr class="my-4">
-                <div class="text-center">
-                     <a href="{% url 'blog:post_list' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Volver a todas las páginas</a>
-                </div>
-
-                {# Aquí podrías añadir una sección de comentarios si la implementas en el futuro #}
-
             </div>
         </div>
-    </article>
+    </div>
 </div>
 {% endblock %}

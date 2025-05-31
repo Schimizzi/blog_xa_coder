@@ -10,11 +10,15 @@ urlpatterns = [
     path('logout/', views.CustomLogoutView.as_view(), name='logout'),
 
     # URLs de Perfil
+    # La URL para editar el perfil DEBE ir ANTES de la que captura <username>
+    path('profile/edit/', views.ProfileUpdateView.as_view(), name='profile_update'),
+    
     # Vista del perfil propio (sin username en la URL, usa el usuario logueado)
     path('profile/', views.profile_view, name='profile_view_self'),
+    
     # Vista del perfil de otro usuario (con username en la URL)
+    # Esta es la ruta que estaba capturando 'edit' incorrectamente.
     path('profile/<str:username>/', views.profile_view, name='profile_view_user'),
-    path('profile/edit/', views.ProfileUpdateView.as_view(), name='profile_update'),
 
     # URLs de Cambio de Contraseña
     path('password/change/', views.CustomPasswordChangeView.as_view(), name='password_change'),
