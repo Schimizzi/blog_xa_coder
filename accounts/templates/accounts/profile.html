@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title|default:"Perfil" }} - Mi Blog{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <img src="{{ profile.get_avatar_url }}" alt="Avatar de {{ profile_user.username }}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #ddd;">
+            <h3>{{ profile.full_name }}</h3>
+            <p class="text-muted">@{{ profile_user.username }}</p>
+            {% if profile_user == request.user %}
+                <a href="{% url 'accounts:profile_update' %}" class="btn btn-primary btn-sm mb-2">Editar Perfil</a>
+                <a href="{% url 'accounts:password_change' %}" class="btn btn-secondary btn-sm mb-2">Cambiar Contraseña</a>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h4>Información del Perfil</h4>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Nombre de Usuario:</dt>
+                        <dd class="col-sm-9">{{ profile_user.username }}</dd>
+
+                        <dt class="col-sm-3">Email:</dt>
+                        <dd class="col-sm-9">{{ profile_user.email }}</dd>
+
+                        {% if profile_user.first_name %}
+                        <dt class="col-sm-3">Nombre:</dt>
+                        <dd class="col-sm-9">{{ profile_user.first_name }}</dd>
+                        {% endif %}
+
+                        {% if profile_user.last_name %}
+                        <dt class="col-sm-3">Apellido:</dt>
+                        <dd class="col-sm-9">{{ profile_user.last_name }}</dd>
+                        {% endif %}
+                        
+                        {% if profile.bio %}
+                        <dt class="col-sm-3">Biografía:</dt>
+                        <dd class="col-sm-9">{{ profile.bio|linebreaksbr }}</dd>
+                        {% endif %}
+
+                        {% if profile.website_url %}
+                        <dt class="col-sm-3">Sitio Web:</dt>
+                        <dd class="col-sm-9"><a href="{{ profile.website_url }}" target="_blank" rel="noopener noreferrer">{{ profile.website_url }}</a></dd>
+                        {% endif %}
+
+                        {% if profile.birth_date %}
+                        <dt class="col-sm-3">Fecha de Nacimiento:</dt>
+                        <dd class="col-sm-9">{{ profile.birth_date|date:"d F, Y" }}</dd>
+                        {% endif %}
+
+                        {% if profile.location %}
+                        <dt class="col-sm-3">Ubicación:</dt>
+                        <dd class="col-sm-9">{{ profile.location }}</dd>
+                        {% endif %}
+
+                        <dt class="col-sm-3">Miembro desde:</dt>
+                        <dd class="col-sm-9">{{ profile_user.date_joined|date:"d F, Y" }}</dd>
+                    </dl>
+                </div>
+            </div>
+            
+            {# Aquí podrías agregar una sección para mostrar los posts del usuario, si es relevante #}
+            {# Por ejemplo:
+            <div class="mt-4">
+                <h4>Posts de {{ profile_user.username }}</h4>
+                {% if profile_user.posts.all %}
+                    <ul>
+                    {% for post in profile_user.posts.all %}
+                        <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>{{ profile_user.username }} aún no ha publicado ningún post.</p>
+                {% endif %}
+            </div>
+            #}
+        </div>
+    </div>
+</div>
+{% endblock %}

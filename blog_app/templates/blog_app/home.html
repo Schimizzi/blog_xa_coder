@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title|default:"Inicio" }} - Mi Blog{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">¡Bienvenido a Mi Blog Personal!</h1>
+            <p class="col-md-10 fs-4">
+                Explora mis últimos artículos, pensamientos e historias. Este es un espacio para compartir ideas y conectar.
+            </p>
+            <a href="{% url 'blog:post_list' %}" class="btn btn-primary btn-lg" type="button">
+                <i class="fas fa-newspaper me-2"></i> Ver Todos los Posts
+            </a>
+            <a href="{% url 'blog:about' %}" class="btn btn-outline-secondary btn-lg ms-2" type="button">
+                <i class="fas fa-info-circle me-2"></i> Conoce Más Sobre Mí
+            </a>
+        </div>
+    </div>
+
+    <h2 class="pb-2 border-bottom mb-4">Posts Recientes</h2>
+    {% if recent_posts %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for post in recent_posts %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    {% if post.get_featured_image_url %}
+                        <a href="{{ post.get_absolute_url }}">
+                            <img src="{{ post.get_featured_image_url }}" class="card-img-top" alt="[Imagen destacada de {{ post.title }}]" style="height: 200px; object-fit: cover;">
+                        </a>
+                    {% else %}
+                         <a href="{{ post.get_absolute_url }}">
+                            <img src="https://placehold.co/600x400/6c757d/white?text=Post+Sin+Imagen" class="card-img-top" alt="[Placeholder para {{ post.title }}]" style="height: 200px; object-fit: cover;">
+                        </a>
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a href="{{ post.get_absolute_url }}" class="text-decoration-none text-dark stretched-link">{{ post.title }}</a>
+                        </h5>
+                        <small class="text-muted post-meta mb-2">
+                            Por <a href="{% url 'accounts:profile_view_user' username=post.author.username %}" class="text-muted">{{ post.author.username }}</a>
+                            el {{ post.published_date|date:"d F, Y" }}
+                        </small>
+                        <div class="card-text mb-3">
+                            {% if post.summary %}
+                                {{ post.summary|safe|truncatewords_html:25 }} {# Muestra el resumen, seguro y truncado #}
+                            {% else %}
+                                {{ post.content|safe|striptags|truncatewords:25 }} {# Si no hay resumen, muestra parte del contenido sin HTML #}
+                            {% endif %}
+                        </div>
+                        {# <a href="{{ post.get_absolute_url }}" class="btn btn-outline-primary mt-auto align-self-start">Leer Más &rarr;</a> #}
+                         {# El stretched-link en el título ya hace toda la card clickeable #}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            Todavía no hay posts publicados. ¡Vuelve pronto!
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

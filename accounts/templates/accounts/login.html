@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title|default:"Iniciar Sesión" }} - Mi Blog{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                     <h2 class="card-title mb-0">{{ page_title|default:"Iniciar Sesión" }}</h2>
+                </div>
+                <div class="card-body">
+                    {% if form.errors and not form.non_field_errors %}
+                    {# Este bloque es para errores generales que no se muestran por campo, 
+                       aunque en LoginView suelen ser non_field_errors #}
+                        <div class="alert alert-danger" role="alert">
+                            Hubo un error con tu inicio de sesión.
+                        </div>
+                    {% endif %}
+
+                    {% if form.non_field_errors %}
+                         <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                                <p class="mb-0">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">{{ form.username.label }}</label>
+                            {{ form.username }}
+                            {% for error in form.username.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.password.id_for_label }}" class="form-label">{{ form.password.label }}</label>
+                            {{ form.password }}
+                             {% for error in form.password.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success w-100">Iniciar Sesión</button>
+                    </form>
+                    <hr>
+                    <div class="text-center">
+                        <p class="mb-1">¿No tienes una cuenta? <a href="{% url 'accounts:register' %}">Regístrate aquí</a></p>
+                        {# <p><a href="#">¿Olvidaste tu contraseña?</a></p> #} {# Descomentar si implementas reseteo de contraseña #}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

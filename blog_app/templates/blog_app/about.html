@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title|default:"Acerca de Mí" }} - Mi Blog{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <img src="{{ owner_image_url|default:'https://placehold.co/200x200/007bff/white?text=Yo' }}" alt="[Foto de {{ owner_name|default:'el dueño' }}]" class="img-fluid rounded-circle shadow" style="width: 180px; height: 180px; object-fit: cover; border: 5px solid white;">
+                </div>
+                
+                <h1 class="text-center mb-3 display-5">{{ page_title|default:"Conoce al Autor" }}</h1>
+                
+                {% if owner_name %}
+                <h3 class="text-center text-muted mb-4">{{ owner_name }}</h3>
+                {% endif %}
+
+                <div class="fs-5 lead text-center mb-5">
+                    <p>{{ owner_bio|default:"Aquí encontrarás una historia fascinante sobre mí y mi viaje."|linebreaksbr }}</p>
+                </div>
+
+                {# Ejemplo de cómo podrías cargar contenido desde un post específico para "Acerca de Mí" #}
+                {% if about_post %}
+                    <hr class="my-5">
+                    <h2 class="mb-3">{{ about_post.title }}</h2>
+                    <div class="post-content">
+                        {{ about_post.content|safe }}
+                    </div>
+                {% endif %}
+
+                <div class="mt-5 text-center">
+                    <h4>¡Conectemos!</h4>
+                    <p>Puedes encontrarme en mis redes sociales o enviarme un mensaje.</p>
+                    <p>
+                        {# Agrega aquí tus enlaces a redes sociales #}
+                        <a href="#" class="btn btn-outline-primary btn-lg m-1"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                        <a href="#" class="btn btn-outline-dark btn-lg m-1"><i class="fab fa-github"></i> GitHub</a>
+                        <a href="#" class="btn btn-outline-info btn-lg m-1"><i class="fab fa-twitter"></i> Twitter</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

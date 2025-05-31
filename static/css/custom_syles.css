@@ -1,0 +1,110 @@
+/* static/css/custom_styles.css */
+
+body {
+    font-family: 'Inter', sans-serif; /* O la fuente que prefieras */
+    background-color: #f8f9fa; /* Un fondo claro para el cuerpo */
+    color: #333;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.navbar-brand i {
+    margin-right: 8px;
+}
+
+.card {
+    border: none; /* Quitar bordes por defecto de las cards de Bootstrap si se prefiere un look más plano */
+}
+
+.card-header {
+    font-weight: 500;
+}
+
+.footer {
+    font-size: 0.9em;
+}
+
+/* Estilos para el avatar en el navbar dropdown */
+.navbar .dropdown-toggle img {
+    border: 1px solid #ddd;
+}
+
+/* Mejorar la apariencia de los formularios */
+.form-control:focus {
+    border-color: #007bff; /* O el color primario de tu tema */
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* Sombra al enfocar */
+}
+
+.invalid-feedback.d-block {
+    font-size: 0.875em;
+}
+
+/* Estilos para posts del blog (ejemplos, se pueden expandir) */
+.post-entry {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+.post-entry:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.post-title a {
+    color: #343a40;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+.post-title a:hover {
+    color: #007bff; /* Color primario al pasar el mouse */
+}
+
+.post-meta {
+    font-size: 0.85em;
+    color: #6c757d; /* Gris suave para metadatos */
+    margin-bottom: 0.5rem;
+}
+.post-meta a {
+    color: #6c757d;
+    text-decoration: none;
+}
+.post-meta a:hover {
+    text-decoration: underline;
+}
+
+.post-thumbnail {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.075);
+}
+
+.post-content img { /* Asegurar que las imágenes dentro del contenido del post sean responsivas */
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.25rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.ck-content { /* Estilos para el contenido generado por CKEditor */
+    line-height: 1.7;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* Mensajes de Django */
+.alert {
+    border-radius: 0.25rem;
+}
