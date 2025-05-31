@@ -92,7 +92,6 @@ def profile_view(request, username=None):
         user = request.user
     
     # El perfil se crea automáticamente gracias a las señales en models.py
-    # profile = get_object_or_404(Profile, user=user) # Esto podría fallar si el perfil no existe
     profile, created = Profile.objects.get_or_create(user=user)
 
     context = {
@@ -108,26 +107,39 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     Vista para que los usuarios actualicen su perfil (User y Profile).
     Maneja dos formularios: UserUpdateForm y ProfileUpdateForm.
     """
+    model = User  # Especificamos el modelo principal
+    form_class = UserUpdateForm  # Especificamos el form_class principal
     template_name = 'accounts/profile_form.html'
-    # No se usa 'model' o 'form_class' directamente porque manejamos dos formularios.
     # success_url se define en get_success_url.
 
     def get_object(self, queryset=None):
         # Devuelve el usuario actual que se está editando
+        # Esto es consistente con model = User
         return self.request.user
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if 'user_form' not in context:
+        # El form principal (UserUpdateForm) ya es añadido por UpdateView como 'form'.
+        # Lo renombramos a 'user_form' para claridad en la plantilla si es necesario,
+        # o simplemente usamos 'form' para el UserUpdateForm y añadimos 'profile_form' aparte.
+        # Para mantener la consistencia con el post() y la plantilla actual:
+        if 'user_form' not in context: # Si no se pasó explícitamente (ej. en error de post)
             context['user_form'] = UserUpdateForm(instance=self.request.user)
+        else: # Si se pasó (ej. desde un post inválido), asegurar que se llame user_form
+            context['user_form'] = context.pop('form', UserUpdateForm(instance=self.request.user))
+
+
         if 'profile_form' not in context:
             context['profile_form'] = ProfileUpdateForm(instance=self.request.user.profile)
+        
         context['page_title'] = "Editar Perfil"
         return context
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object() # El usuario actual
-        # Pasa request.POST y request.FILES a ambos formularios
+        # self.object se establece por la superclase UpdateView usando get_object()
+        self.object = self.get_object() 
+        
+        # Instanciamos ambos formularios con los datos del POST y los archivos
         user_form = UserUpdateForm(request.POST, instance=self.request.user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=self.request.user.profile)
 
@@ -139,6 +151,9 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         else:
             messages.error(request, 'Por favor, corrige los errores en el formulario.')
             # Si hay errores, vuelve a renderizar la página con los formularios y sus errores
+            # Pasamos los formularios con errores al contexto.
+            # UpdateView normalmente pasaría su form_class como 'form'.
+            # Aquí nos aseguramos de pasar ambos con los nombres esperados por la plantilla.
             return self.render_to_response(
                 self.get_context_data(user_form=user_form, profile_form=profile_form)
             )
