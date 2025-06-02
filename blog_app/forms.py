@@ -52,7 +52,7 @@ class PostForm(forms.ModelForm):
             'title': 'Título Principal del Post',
             'slug': 'Fragmento de URL (Slug)',
             'featured_image': 'Imagen Destacada',
-            'status': 'Estado de Publicación',
+            #'status': 'Estado de Publicación',
             'published_date': 'Fecha y Hora de Publicación',
             'meta_description': 'Meta Descripción (SEO)',
             'keywords': 'Palabras Clave (SEO)',

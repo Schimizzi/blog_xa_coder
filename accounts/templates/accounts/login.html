@@ -12,8 +12,6 @@
                 </div>
                 <div class="card-body">
                     {% if form.errors and not form.non_field_errors %}
-                    {# Este bloque es para errores generales que no se muestran por campo, 
-                       aunque en LoginView suelen ser non_field_errors #}
                         <div class="alert alert-danger" role="alert">
                             Hubo un error con tu inicio de sesión.
                         </div>
