@@ -45,7 +45,7 @@ Este es un proyecto de blog personal desarrollado con Python y el framework Djan
 
 ## Estructura del Proyecto
 
-
+```
 blog_django_project/
 ├── manage.py
 ├── blog/                   # Configuración del proyecto
@@ -56,7 +56,7 @@ blog_django_project/
 ├── templates/              # Plantillas globales
 ├── .gitignore
 └── requirements.txt
-
+```
 
 ## Requisitos Previos
 

@@ -63,22 +63,6 @@
                     </dl>
                 </div>
             </div>
-            
-            {# Aquí podrías agregar una sección para mostrar los posts del usuario, si es relevante #}
-            {# Por ejemplo:
-            <div class="mt-4">
-                <h4>Posts de {{ profile_user.username }}</h4>
-                {% if profile_user.posts.all %}
-                    <ul>
-                    {% for post in profile_user.posts.all %}
-                        <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
-                    {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>{{ profile_user.username }} aún no ha publicado ningún post.</p>
-                {% endif %}
-            </div>
-            #}
         </div>
     </div>
 </div>
