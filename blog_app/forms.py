@@ -36,7 +36,7 @@ class PostForm(forms.ModelForm):
             'status': forms.Select(attrs={'class': 'form-select'}),
             'published_date': forms.DateTimeInput(
                 attrs={'class': 'form-control', 'type': 'datetime-local'},
-                format='%Y-%m-%dT%H:%M' # Formato esperado por el widget datetime-local
+                format='%Y-%m-%dT%H:%M'
             ),
             'meta_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Descripción breve para SEO (máx. 160 caracteres)'}),
             'keywords': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Palabras clave separadas por comas'}),
@@ -52,7 +52,7 @@ class PostForm(forms.ModelForm):
             'title': 'Título Principal del Post',
             'slug': 'Fragmento de URL (Slug)',
             'featured_image': 'Imagen Destacada',
-            #'status': 'Estado de Publicación',
+            'status': 'Estado de Publicación',
             'published_date': 'Fecha y Hora de Publicación',
             'meta_description': 'Meta Descripción (SEO)',
             'keywords': 'Palabras Clave (SEO)',

@@ -101,18 +101,6 @@
         </nav>
         {% endif %}
         {% else %}
-        {# Este mensaje se muestra ahora desde la vista con messages framework #}
-        {# Si prefieres un mensaje estático aquí, puedes añadirlo #}
-        {# {% if search_query %}
-            <div class="alert alert-warning" role="alert">
-                No se encontraron posts que coincidan con "<strong>{{ search_query }}</strong>".
-                Intenta con otro término o <a href="{% url 'blog:post_list' %}" class="alert-link">muestra todos los posts</a>.
-            </div>
-        {% else %}
-            <div class="alert alert-info" role="alert">
-                Aún no hay posts publicados. ¡Sé el primero en <a href="{% url 'blog:post_create' %}" class="alert-link">crear uno</a>!
-            </div>
-        {% endif %} #}
     {% endif %}
 </div>
 {% endblock %}

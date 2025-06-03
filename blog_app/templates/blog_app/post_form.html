@@ -4,7 +4,6 @@
 {% block title %}{{ page_title|default:"Gestionar Post" }} - Mi Blog{% endblock %}
 
 {% block extra_head %}
-    {# Cargar los media necesarios para el widget de CKEditor #}
     {{ form.media }} 
 {% endblock %}
 
@@ -17,7 +16,7 @@
                     <h2 class="card-title mb-0">{{ page_title }}</h2>
                 </div>
                 <div class="card-body p-4">
-                    <form method="post" enctype="multipart/form-data" novalidate> {# enctype es crucial para la subida de archivos #}
+                    <form method="post" enctype="multipart/form-data" novalidate> 
                         {% csrf_token %}
                         
                         {% if form.non_field_errors %}
@@ -28,7 +27,6 @@
                             </div>
                         {% endif %}
 
-                        {# Renderizar campos individualmente para mayor control o usar un bucle #}
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="mb-3">
@@ -69,7 +67,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="{{ form.featured_image.id_for_label }}" class="form-label">{{ form.featured_image.label }}</label>
-                                    {% if form.instance.pk and form.instance.get_featured_image_url %} {# Modificado: solo mostrar si la instancia ya existe (tiene pk) #}
+                                    {% if form.instance.pk and form.instance.get_featured_image_url %} 
                                     <p class="mb-1">
                                         <small>Actual: <a href="{{ form.instance.get_featured_image_url }}" target="_blank">{{ form.instance.featured_image.name|truncatechars:30 }}</a></small>
                                         <br><img src="{{ form.instance.get_featured_image_url }}" alt="[Imagen destacada actual]" style="max-height: 80px; margin-top: 5px; border-radius: 4px;">

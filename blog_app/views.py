@@ -106,9 +106,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     template_name = 'blog_app/post_form.html'
 
     def form_valid(self, form):
-        """
-        Asigna el usuario logueado como autor del post antes de guardarlo.
-        """
         form.instance.author = self.request.user
         messages.success(self.request, "¡Post creado exitosamente!")
         return super().form_valid(form)
