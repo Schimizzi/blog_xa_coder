@@ -80,10 +80,6 @@ def profile_view(request, username=None):
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
-    """
-    Vista para que los usuarios actualicen su perfil (User y Profile).
-    Maneja dos formularios: UserUpdateForm y ProfileUpdateForm.
-    """
     model = User 
     form_class = UserUpdateForm  
     template_name = 'accounts/profile_form.html'
