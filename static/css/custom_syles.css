@@ -1,8 +1,6 @@
-/* static/css/custom_styles.css */
-
 body {
-    font-family: 'Inter', sans-serif; /* O la fuente que prefieras */
-    background-color: #f8f9fa; /* Un fondo claro para el cuerpo */
+    font-family: 'Inter', sans-serif; 
+    background-color: #f8f9fa; 
     color: #333;
 }
 
@@ -15,7 +13,7 @@ body {
 }
 
 .card {
-    border: none; /* Quitar bordes por defecto de las cards de Bootstrap si se prefiere un look más plano */
+    border: none; 
 }
 
 .card-header {
@@ -26,22 +24,19 @@ body {
     font-size: 0.9em;
 }
 
-/* Estilos para el avatar en el navbar dropdown */
 .navbar .dropdown-toggle img {
     border: 1px solid #ddd;
 }
 
-/* Mejorar la apariencia de los formularios */
 .form-control:focus {
-    border-color: #007bff; /* O el color primario de tu tema */
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* Sombra al enfocar */
+    border-color: #007bff; 
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); 
 }
 
 .invalid-feedback.d-block {
     font-size: 0.875em;
 }
 
-/* Estilos para posts del blog (ejemplos, se pueden expandir) */
 .post-entry {
     margin-bottom: 2rem;
     padding-bottom: 1.5rem;
@@ -59,12 +54,12 @@ body {
     transition: color 0.2s ease-in-out;
 }
 .post-title a:hover {
-    color: #007bff; /* Color primario al pasar el mouse */
+    color: #007bff; 
 }
 
 .post-meta {
     font-size: 0.85em;
-    color: #6c757d; /* Gris suave para metadatos */
+    color: #6c757d; 
     margin-bottom: 0.5rem;
 }
 .post-meta a {
@@ -83,7 +78,7 @@ body {
     box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.075);
 }
 
-.post-content img { /* Asegurar que las imágenes dentro del contenido del post sean responsivas */
+.post-content img { 
     max-width: 100%;
     height: auto;
     border-radius: 0.25rem;
@@ -91,7 +86,7 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.ck-content { /* Estilos para el contenido generado por CKEditor */
+.ck-content { 
     line-height: 1.7;
 }
 
@@ -104,7 +99,6 @@ body {
     border-color: #0056b3;
 }
 
-/* Mensajes de Django */
 .alert {
     border-radius: 0.25rem;
 }
